@@ -22,7 +22,17 @@ const Diente = ({ colorSeleccionado, numero }) => {
   };
 
   const deshabilitarDiente = () => {
-    setDeshabilitado(!deshabilitado);
+    if (!deshabilitado) {
+      // Si se va a deshabilitar, restablecer todos los colores a blanco
+      setColores({
+        arriba: "#ffffff",
+        abajo: "#ffffff",
+        izq: "#ffffff",
+        der: "#ffffff",
+        centro: "#ffffff",
+      });
+    }
+    setDeshabilitado(!deshabilitado); // Cambiar el estado de deshabilitado
   };
 
   return (
