@@ -62,26 +62,6 @@ function App() {
     alert("JSON generado y descargado.");
   };
 
-  const recibirJSON = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-  
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const json = JSON.parse(event.target.result);
-        if (typeof json === "object") {
-          setEstadoDientes(json);
-          alert("Archivo importado correctamente.");
-        } else {
-          alert("Formato de JSON no válido.");
-        }
-      } catch (error) {
-        alert("El archivo no es un JSON válido.");
-      }
-    };
-    reader.readAsText(file);
-  };
   
 
   return (
@@ -92,7 +72,6 @@ function App() {
         colorSeleccionado={colorSeleccionado}
         setColorSeleccionado={setColorSeleccionado}
         handleExport={generarJSON}
-        handleImport={recibirJSON}
       />
 
       <div

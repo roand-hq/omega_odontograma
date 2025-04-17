@@ -9,23 +9,37 @@ const colores = [
   { nombre: "Negro", valor: "#000000" }
 ];
 
-const Header = ({
-  abierto,
-  onClick,
-  colorSeleccionado,
-  setColorSeleccionado,
-  handleExport,
-  handleImport
-}) => {
+const Header = ({ abierto, onClick, colorSeleccionado, setColorSeleccionado }) => {
   const fileInputRef = useRef(null);
 
   const seleccionarColor = (color) => {
     setColorSeleccionado(color);
-    onClick?.();
+    onClick?.(); // Cierra si estaba abierto
+  };
+
+  const handleExport = () => {
+    //aqui vas a poner lo que se va a hacer al exportar
   };
 
   const handleImportClick = () => {
-    fileInputRef.current.click();
+    fileInputRef.current.click(); // Simula el click en el input
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const json = JSON.parse(event.target.result);
+        setColorSeleccionado(json); // Establece el color importado
+        console.log("Color importado:", json);
+      } catch (error) {
+        console.error("Archivo JSON inválido:", error);
+      }
+    };
+    reader.readAsText(file);
   };
 
   return (
@@ -58,6 +72,7 @@ const Header = ({
         )}
       </div>
 
+      {/* Botones de exportar e importar */}
       <div className="header-botones">
         <button onClick={handleExport}>Exportar</button>
         <button onClick={handleImportClick}>Importar</button>
@@ -66,12 +81,11 @@ const Header = ({
           accept=".json"
           ref={fileInputRef}
           style={{ display: "none" }}
-          onChange={handleImport}
+          onChange={handleFileChange}
         />
       </div>
     </div>
   );
 };
-
 
 export default Header;
