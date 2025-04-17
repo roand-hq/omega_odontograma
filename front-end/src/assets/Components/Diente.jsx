@@ -1,77 +1,72 @@
 import { useState } from "react";
 import "./CSS/style.css";
 
-const Diente = ({ colorSeleccionado, numero }) => {
-  const [colores, setColores] = useState({
-    arriba: "#ffffff",
-    abajo: "#ffffff",
-    izq: "#ffffff",
-    der: "#ffffff",
-    centro: "#ffffff",
-  });
+const Diente = ({
+  colorSeleccionado,
+  numero,
+  cuadrante,
+  onCambioColores,
+  datosDiente = {}
+}) => {
+  const {
+    deshabilitado = false,
+    arriba = "#ffffff",
+    centro = "#ffffff",
+    izquierda = "#ffffff",
+    derecha = "#ffffff",
+    abajo = "#ffffff"
+  } = datosDiente;
 
-  const [deshabilitado, setDeshabilitado] = useState(false); // Estado que controla si el diente está deshabilitado
+  const idDiente = `${cuadrante}${numero}`;
 
   const cambiarColor = (seccion) => {
-    if (deshabilitado) return; // Si está deshabilitado, no hace nada
+    if (deshabilitado) return;
 
-    setColores((prev) => ({
-      ...prev,
-      [seccion]: prev[seccion] === colorSeleccionado.valor ? "#ffffff" : colorSeleccionado.valor,
-    }));
+    const nuevoColor = datosDiente[seccion] === colorSeleccionado.valor ? "#ffffff" : colorSeleccionado.valor;
+
+    onCambioColores(idDiente, {
+      ...datosDiente,
+      [seccion]: nuevoColor
+    });
   };
 
   const deshabilitarDiente = () => {
-    if (!deshabilitado) {
-      // Si se va a deshabilitar, restablecer todos los colores a blanco
-      setColores({
-        arriba: "#ffffff",
-        abajo: "#ffffff",
-        izq: "#ffffff",
-        der: "#ffffff",
-        centro: "#ffffff",
-      });
-    }
-    setDeshabilitado(!deshabilitado); // Cambiar el estado de deshabilitado
+    const nuevoEstado = !deshabilitado;
+
+    const nuevosColores = nuevoEstado
+      ? {
+          arriba: "#ffffff",
+          centro: "#ffffff",
+          izquierda: "#ffffff",
+          derecha: "#ffffff",
+          abajo: "#ffffff"
+        }
+      : {
+          arriba,
+          centro,
+          izquierda,
+          derecha,
+          abajo
+        };
+
+    onCambioColores(idDiente, {
+      ...nuevosColores,
+      deshabilitado: nuevoEstado
+    });
   };
 
   return (
     <div className="contenedor-diente">
-      {/* Número encima del diente */}
       <div className="numero-diente" onClick={deshabilitarDiente}>
-        {numero}
+        {idDiente}
       </div>
 
       <div className={`diente ${deshabilitado ? "diente-deshabilitado" : ""}`}>
-        <div
-          className="seccion arriba"
-          style={{ backgroundColor: colores.arriba }}
-          onClick={() => cambiarColor("arriba")}
-        ></div>
-
-        <div
-          className="seccion abajo"
-          style={{ backgroundColor: colores.abajo }}
-          onClick={() => cambiarColor("abajo")}
-        ></div>
-
-        <div
-          className="seccion izq"
-          style={{ backgroundColor: colores.izq }}
-          onClick={() => cambiarColor("izq")}
-        ></div>
-
-        <div
-          className="seccion der"
-          style={{ backgroundColor: colores.der }}
-          onClick={() => cambiarColor("der")}
-        ></div>
-
-        <div
-          className="centro"
-          style={{ backgroundColor: colores.centro }}
-          onClick={() => cambiarColor("centro")}
-        ></div>
+        <div className="seccion arriba" style={{ backgroundColor: arriba }} onClick={() => cambiarColor("arriba")} />
+        <div className="seccion abajo" style={{ backgroundColor: abajo }} onClick={() => cambiarColor("abajo")} />
+        <div className="seccion izq" style={{ backgroundColor: izquierda }} onClick={() => cambiarColor("izquierda")} />
+        <div className="seccion der" style={{ backgroundColor: derecha }} onClick={() => cambiarColor("derecha")} />
+        <div className="centro" style={{ backgroundColor: centro }} onClick={() => cambiarColor("centro")} />
 
         <div className="linea-diagonal-izq"></div>
         <div className="linea-diagonal-der"></div>
@@ -79,5 +74,6 @@ const Diente = ({ colorSeleccionado, numero }) => {
     </div>
   );
 };
+
 
 export default Diente;
