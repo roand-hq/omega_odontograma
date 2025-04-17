@@ -9,7 +9,7 @@ const colores = [
   { nombre: "Negro", valor: "#000000" }
 ];
 
-const Header = ({ abierto, onClick, colorSeleccionado, setColorSeleccionado }) => {
+const Header = ({ abierto, onClick, colorSeleccionado, setColorSeleccionado, handleExport }) => {
   const fileInputRef = useRef(null);
 
   const seleccionarColor = (color) => {
@@ -17,9 +17,7 @@ const Header = ({ abierto, onClick, colorSeleccionado, setColorSeleccionado }) =
     onClick?.(); // Cierra si estaba abierto
   };
 
-  const handleExport = () => {
-    //aqui vas a poner lo que se va a hacer al exportar
-  };
+  
 
   const handleImportClick = () => {
     fileInputRef.current.click(); // Simula el click en el input
